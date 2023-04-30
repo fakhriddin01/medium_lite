@@ -6,9 +6,10 @@ import { Post } from './models/post.model';
 import { UserModule } from '../user/user.module';
 import { User } from '../user/models/user.model';
 import { PostRate } from '../post-rate/models/post-rate.model';
+import { Media } from '../media/models/media.model';
 
 @Module({
-  imports:[SequelizeModule.forFeature([Post, User, PostRate]),
+  imports:[SequelizeModule.forFeature([Post, User, PostRate, Media]),
   forwardRef(() => UserModule)
   ],
   controllers: [PostController],

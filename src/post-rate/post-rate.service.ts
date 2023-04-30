@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreatePostRateDto } from './dto/create-post-rate.dto';
-import { UpdatePostRateDto } from './dto/update-post-rate.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { PostRate } from './models/post-rate.model';
 import { UserService } from '../user/user.service';
@@ -51,9 +50,9 @@ export class PostRateService {
     return this.rateRepo.findByPk(id, {include: {all:true}});
   }
 
-  update(id: number, updatePostRateDto: UpdatePostRateDto) {
-    return `This action updates a #${id} postRate`;
-  }
+  // update(id: number, updatePostRateDto: UpdatePostRateDto) {
+  //   return `This action updates a #${id} postRate`;
+  // }
 
   async remove(id: number) {
     let rate = await this.findOne(id);

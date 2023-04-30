@@ -8,6 +8,8 @@ import { PostModule } from './post/post.module';
 import { Post } from './post/models/post.model';
 import { PostRateModule } from './post-rate/post-rate.module';
 import { PostRate } from './post-rate/models/post-rate.model';
+import { MediaModule } from './media/media.module';
+import { Media } from './media/models/media.model';
 
 @Module({
     imports: [
@@ -19,13 +21,14 @@ import { PostRate } from './post-rate/models/post-rate.model';
             username: process.env.POSTGRES_USER,
             password: String(process.env.POSTGRES_PASSWORD),
             database: process.env.POSTGRES_DB,
-            models: [User, Post, PostRate],
+            models: [User, Post, PostRate, Media],
             autoLoadModels: true,
-            logging: true
+            logging: false
         }),
         UserModule,
         PostModule,
-        PostRateModule],
+        PostRateModule,
+        MediaModule],
     controllers: [],
     providers: [],
     exports: []

@@ -30,7 +30,7 @@ export class PostService {
 
   }
 
-  findAll(page: number =1 , limit: number = 5) {
+  findAll(page: number =1 , limit: number = 2) {
     let offset = limit*(page-1)
     return this.postRepo.findAll({offset, limit, include:{all:true}});
   }

@@ -1,6 +1,7 @@
 import { Column, DataType, Table, Model, ForeignKey, BelongsTo, HasMany } from "sequelize-typescript";
 import { User } from "../../user/models/user.model";
 import { PostRate } from "../../post-rate/models/post-rate.model";
+import { Media } from "../../media/models/media.model";
 
 interface PostCreatAttr {
     title: string;
@@ -50,8 +51,11 @@ export class Post extends Model<Post, PostCreatAttr> {
     user_id: number;
 
     @BelongsTo(()=>User)
-    Author: User[]
+    Author: User
 
     @HasMany(()=>PostRate)
     ratings: PostRate[]
+
+    @HasMany(()=>Media)
+    media: Media[]
 }

@@ -1,6 +1,13 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateUserDto } from './create-user.dto';
+import { ApiProperty } from "@nestjs/swagger";
+import { IsNotEmpty, IsInt, IsString, IsEmail, IsStrongPassword, IsOptional} from "class-validator";
 
 export class UpdateUserDto {
-    user_rate: number;
+    @ApiProperty({example: 'Fakhriddin', description: "username"})
+    @IsString()
+    @IsOptional()
+    username?: string;
+
+    @ApiProperty({example: '', description: "updates when post rate updates"})
+    @IsOptional()
+    user_rate?: number;
 }
