@@ -23,7 +23,7 @@ export class PostService {
     }
 
     const read_time = this.read_time_calculation(createPostDto.content);
-
+    
     const newPost = await this.postRepo.create({...createPostDto, read_time});
 
     return newPost;
@@ -49,14 +49,6 @@ export class PostService {
   async findOne(id: number) {
 
     const post = await this.postRepo.findByPk(id, {include: {all:true}});
-    // const post = await this.postRepo.findByPk(id,  {
-    //   include: {
-    //     model: PostRate,
-    //     as: 'ratings',
-    //     attributes: [[Sequelize.fn('AVG', Sequelize.col('rate')), 'rating']],
-    //   },
-    //   group: ['post_id']
-    // });
 
     if(!post){
       throw new HttpException('post with this id not found', HttpStatus.NOT_FOUND)
@@ -64,8 +56,18 @@ export class PostService {
     return post
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return this.postRepo.update(updatePostDto, {where:{id}, returning: true});
+  async update(id: number, updatePostDto: UpdatePostDto) {
+
+    const updatedPost = await this.postRepo.update(updatePostDto, {where:{id}, returning: true});
+    let rate = await this.postRepo.findAll({where:{user_id: updatedPost[1][0].user_id}, attributes:[[ Sequelize.fn('AVG', Sequelize.col('average_rating')), 'user_rate']]});
+
+    let user_rate = +rate[0].dataValues["user_rate"]
+    if(user_rate === 0){
+      user_rate = null
+    }
+    
+    let updatedRating = await this.userService.update(updatedPost[1][0].user_id, {user_rate});
+    return updatedPost;
   }
 
   remove(id: number) {

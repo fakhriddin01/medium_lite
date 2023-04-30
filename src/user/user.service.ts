@@ -8,6 +8,8 @@ import * as bcrypt from 'bcryptjs'
 import { LoginUserDto } from './dto/login-user.dto';
 import { FilesService } from '../files/files.service';
 import { PostService } from '../post/post.service';
+import { Post } from '../post/models/post.model';
+import { Sequelize } from 'sequelize';
 
 @Injectable()
 export class UserService {
@@ -93,9 +95,29 @@ export class UserService {
     return foundUser;
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
 
-    const foundUser = this.userRepo.findByPk(id, {include: {all:true}});
+    const foundUser = await User.findOne({
+      where: { id },
+      attributes: {
+        include: [
+          [
+            Sequelize.fn('AVG', Sequelize.col('posts.average_rating')),
+            'rate',
+          ],
+        ],
+      },
+      include: [
+        {
+          model: Post,
+          as: 'posts', // add the alias for the Post model
+          attributes: [],
+          where: { user_id: id },
+          required: false,
+        },
+      ],
+      group: ['User.id'],
+    });
     if(!foundUser){
       throw new HttpException('User with this id not found', HttpStatus.NOT_FOUND)
     }
@@ -103,7 +125,7 @@ export class UserService {
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+    return this.userRepo.update(updateUserDto, {where: {id}, returning: true});
   }
 
   remove(id: number) {

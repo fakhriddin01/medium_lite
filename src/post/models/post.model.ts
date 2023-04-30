@@ -7,9 +7,10 @@ interface PostCreatAttr {
     content: string;
     read_time: number;
     user_id: number;
+    rating: number;
 }
 
-@Table({tableName: "post"})
+@Table({tableName: "Post"})
 export class Post extends Model<Post, PostCreatAttr> {
     @Column({
         type:DataType.INTEGER,
@@ -35,6 +36,12 @@ export class Post extends Model<Post, PostCreatAttr> {
     })
     read_time: number;
 
+    @Column({
+        type:DataType.DECIMAL,
+        defaultValue: null
+    })
+    average_rating: number;
+
     @ForeignKey(()=> User)
     @Column({
         type:DataType.INTEGER,
@@ -43,7 +50,7 @@ export class Post extends Model<Post, PostCreatAttr> {
     user_id: number;
 
     @BelongsTo(()=>User)
-    Author: User
+    Author: User[]
 
     @HasMany(()=>PostRate)
     ratings: PostRate[]

@@ -9,6 +9,7 @@ interface UserCreationAttr {
     image: string;
     hashed_refresh_token: string;
     is_active: boolean;
+    user_rate: number;
 }
 
 @Table({tableName: "user"})
@@ -42,6 +43,12 @@ export class User extends Model<User, UserCreationAttr> {
         type:DataType.STRING,
     })
     hashed_refresh_token: string;
+
+    @Column({
+        type:DataType.DECIMAL,
+        defaultValue: null
+    })
+    user_rate: number;
     
     @Column({
         type:DataType.BOOLEAN,
@@ -57,8 +64,5 @@ export class User extends Model<User, UserCreationAttr> {
     @HasMany(()=>Post)
     posts: Post[]
     
-    @HasMany(()=>PostRate)
-    ratings: PostRate[]
-
 
 }
